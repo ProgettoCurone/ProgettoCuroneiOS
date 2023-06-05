@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GraficaCurone.ViewModel"
+             x:Class="GraficaCurone.View.MapPage"
+             Title="MapPage"
+             x:DataType="vm:MainViewModel">
+    <VerticalStackLayout>
+        <Frame HeightRequest="300" WidthRequest="300" CornerRadius="15">
+            <Image Source="{Binding trackManager.PathImage}" />
+        </Frame>
+        <Frame Margin="0, 20, 0, 0" HeightRequest="500" CornerRadius="15">
+            <ScrollView>
+                <Label
+                        Text="{Binding trackManager.CurrentText}"
+                        TextColor="White"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        HorizontalTextAlignment="Center" />
+            </ScrollView>
+        </Frame>
+    </VerticalStackLayout>
+</ContentPage>

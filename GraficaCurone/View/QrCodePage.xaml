@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maui="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             x:Class="GraficaCurone.View.QrCodePage"
+             Title="QrCodePage">
+    <VerticalStackLayout
+            x:Name="stack"
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+        <maui:CameraView x:Name="cameraView" WidthRequest="400" HeightRequest="300" BarCodeDetectionEnabled="True"
+                             BarcodeDetected="BarcodeDetected"/>
+    </VerticalStackLayout>
+</ContentPage>

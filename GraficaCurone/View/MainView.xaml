@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="GraficaCurone.View.MainView"
+        xmlns:vm="clr-namespace:GraficaCurone.ViewModel"
+        xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+        xmlns:mct="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+        xmlns:lang="clr-namespace:GraficaCurone.Resources.Languages"
+        xmlns:syncfusion="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
+        FlyoutBehavior="Flyout"
+        FlyoutHeaderBehavior="Fixed"
+        FlyoutVerticalScrollMode="Auto"
+        BackgroundColor="{AppThemeBinding Light={StaticResource LightFlyout}, Dark={StaticResource DarkFlyout}}"
+        x:DataType="vm:MainViewModel">
+
+    <Shell.Behaviors>
+        <mct:StatusBarBehavior StatusBarColor="{AppThemeBinding Light={StaticResource LightFlyout}, Dark={StaticResource DarkFlyout}}"/>
+    </Shell.Behaviors>
+    
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightFlyout}, Dark={StaticResource DarkFlyout}}"
+              HeightRequest="70"
+              Padding="20,20">
+            <Label Text="Parco del Curone"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   FontFamily="BoldenaBold-VGjmz"/>
+        </Grid>
+    </Shell.FlyoutHeader>
+    <Shell.FlyoutFooter>
+        <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightFlyout}, Dark={StaticResource DarkFlyout}}"
+              HeightRequest="30">
+            <Label Text="Copyright 2023 ©"
+                   FontSize="Small"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   TextColor="White"
+                   FontFamily="BoldenaBold-VGjmz"/>
+        </Grid>
+    </Shell.FlyoutFooter>
+    <FlyoutItem Title="Home" Icon="iconhome.svg" Appearing="OnAppearing">
+        <ContentPage Title="Home" Background="{AppThemeBinding Light={StaticResource LightBackGround}, Dark={StaticResource DarkBackGround}}">
+            <ScrollView>
+                <VerticalStackLayout Margin="0,20,0,0">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapGestureCommand}"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Grid RowDefinitions="*,20*,*" ColumnDefinitions="*,*,*,*,10*,*,*,*,*">
+                        <Frame Grid.Row="1"
+                            Grid.Column="3"
+                            Grid.ColumnSpan="3"
+                            CornerRadius="15"
+                            Padding="0">
+                            <Grid ColumnDefinitions="*,*,*" RowDefinitions="*">
+                                <!--Tasto Mappa-->
+                                <Button
+                                    x:Name="MappaButton"
+                                    Grid.Column="0"
+                                    Text="{Binding LocalizationManager[Mappa],Mode=OneWay}"
+                                    CornerRadius="15"
+                                    Command="{Binding SwitchPageCommand}"
+                                    CommandParameter="showmap">
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding MapVisible}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightPressedButton}, Dark={StaticResource DarkPressedButton}}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding MapVisible}" Value="False">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
+                                
+                                <!--Tasto Bussola-->
+                                <Button
+                                    x:Name="BussolaButton"
+                                    Grid.Column="1"
+                                    Text="{Binding LocalizationManager[Buss],Mode=OneWay}"
+                                    CornerRadius="15"
+                                    Padding="0"
+                                    Command="{Binding SwitchPageCommand}"
+                                    CommandParameter="showcompass">
+                                    <Button.Triggers>
+                                            <DataTrigger TargetType="Button" Binding="{Binding CompassVisible}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightPressedButton}, Dark={StaticResource DarkPressedButton}}" />
+                                        </DataTrigger>
+                                            <DataTrigger TargetType="Button" Binding="{Binding CompassVisible}" Value="False">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
+                                <!--Tasto QR Code-->
+
+                                <Button
+                                    x:Name="QRButton"
+                                    Grid.Column="2"
+                                    Text="QR"
+                                    CornerRadius="15"    
+                                    Command="{Binding SwitchPageCommand}"
+                                    CommandParameter="showcamera">
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding CameraVisible}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightPressedButton}, Dark={StaticResource DarkPressedButton}}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding CameraVisible}" Value="False">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                    <Border Margin="20" Content="{Binding CurrentPage}" BackgroundColor="Transparent" Padding="0" StrokeThickness="0"/>
+                    <!--<Frame Margin="20" x:Name="FrameMappa" BackgroundColor="Transparent" Padding="0" BorderColor="Transparent" IsVisible="{Binding MapVisible}">
+                        <VerticalStackLayout>
+                            <Frame HeightRequest="300" WidthRequest="300" CornerRadius="15">
+                                <Image Source="{Binding trackManager.PathImage}" />
+                            </Frame>
+                            <Frame Margin="0, 20, 0, 0" HeightRequest="500" CornerRadius="15">
+                                <ScrollView>
+                                    <Label
+                                        Text="{Binding trackManager.CurrentText}"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center" />
+                                </ScrollView>
+                            </Frame>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame Margin="20" x:Name="FrameBussola" IsVisible="{Binding CompassVisible}" BackgroundColor="Transparent" BorderColor="Transparent">
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Image
+                                    x:Name="Bussola"
+                                    Rotation="{Binding Rotation}"
+                                    Source="bussola.png"
+                                    WidthRequest="300"
+                                    HeightRequest="300"/>
+                            </Grid>
+                            <Label x:ùName="testoBuss" 
+                            Text="{Binding TextCompass}"
+                               TextColor="White"
+                               FontSize="60"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame x:Name="FrameQR" IsVisible="{Binding CameraVisible}" Margin="20">
+                        <VerticalStackLayout
+                        x:Name="vStack"
+                        Spacing="25"
+                        Padding="30,0"
+                        VerticalOptions="Center">
+                            <cv:CameraView x:Name="cameraView" WidthRequest="400" HeightRequest="300" BarCodeDetectionEnabled="True"
+                                       CamerasLoaded="CameraLoaded"
+                                       BarcodeDetected="BarcodeDetected"/>
+                        </VerticalStackLayout>
+                    </Frame>-->
+                </VerticalStackLayout>
+            </ScrollView>
+        </ContentPage>
+    </FlyoutItem>
+    <FlyoutItem Title="{Binding LocalizationManager[Imp],Mode=OneWay}" Icon="iconsettings.svg">
+        <ContentPage Title="{Binding LocalizationManager[Leng],Mode=OneWay}" BackgroundColor="{AppThemeBinding Light={StaticResource LightBackGround}, Dark={StaticResource DarkBackGround}}" Padding="10">
+            <VerticalStackLayout>
+                <Label Text="{Binding LocalizationManager[TestoLingua],Mode=OneWay}"
+                       FontSize="20"
+                       TextColor="White"
+                       Padding="10, 10, 10, 20"/>
+                <Button x:Name="BottoneLingua" Text="Lingua" HorizontalOptions="Center"
+                        Command="{Binding BottoneLinguaClickedCommand}"/>
+            </VerticalStackLayout>
+        </ContentPage>
+    </FlyoutItem>
+    <FlyoutItem Title="{Binding LocalizationManager[Aiuto],Mode=OneWay}" Icon="iconsinterrogativo.png">
+        <ContentPage>
+            <ContentPage.Content>
+                <syncfusion:SfPdfViewer DocumentSource="{Binding DocumentStream}"/>
+            </ContentPage.Content>
+        </ContentPage>
+    </FlyoutItem>
+</Shell>
