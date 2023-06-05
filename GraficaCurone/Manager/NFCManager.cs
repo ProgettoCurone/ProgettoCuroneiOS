@@ -20,12 +20,17 @@ public partial class NFCManager : ObservableObject
     bool _isDeviceiOS = false;
     private TrackManager trackManager;
     public MainViewModel mainViewModel;
+
+    private Timer _checkNfcTimer;
+    private bool isFirstActive;
     #endregion
 
     public NFCManager(TrackManager trackManager, MainViewModel mainViewModel)
     {
         this.trackManager = trackManager;
         this.mainViewModel = mainViewModel;
+
+        isFirstActive = true;
     }
 
     #region Property per NFC
@@ -180,13 +185,24 @@ public partial class NFCManager : ObservableObject
             if (!CrossNFC.Current.IsAvailable)
                 await ShowAlert("NFC is not available");
 
-            NfcIsEnabled = CrossNFC.Current.IsEnabled;
-            if (!NfcIsEnabled)
-                await ShowAlert("NFC is disabled");
+            _checkNfcTimer = new Timer(async _ => {
+                NfcIsEnabled = CrossNFC.Current.IsEnabled;
+                if (!NfcIsEnabled)
+                {
+                    isFirstActive = true;
+                    await ShowAlert("NFC is disabled");
+                    return;
+                }
 
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-                _isDeviceiOS = true;
-            await AutoStartAsync().ConfigureAwait(false);
+                if (!isFirstActive) return;
+                isFirstActive = false;
+
+                await ShowAlert("Partito");
+
+                if (DeviceInfo.Platform == DevicePlatform.iOS) _isDeviceiOS = true;
+                await AutoStartAsync().ConfigureAwait(false);
+
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
         }
     }
 }

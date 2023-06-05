@@ -31,6 +31,7 @@ namespace GraficaCurone.Manager
         public TrackManager(IAudioManager audioManager)
         {
             this.audioManager = audioManager;
+            LastTrack = -1;
         }
 
         public async Task Init()
@@ -75,12 +76,29 @@ namespace GraficaCurone.Manager
                     tracceTesto.Add(stream.ReadToEnd());
                 }
             }
+
+            bool wasPlaying = player != null && player.IsPlaying;
+
+            if (LastTrack != -1)
+            {
+                secondi = player.CurrentPosition;
+                
+                var templayer = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(tracceAudio[LastTrack]));
+                templayer.Seek(secondi);
+
+                if (wasPlaying) player.Dispose();
+                player = templayer;
+                if (wasPlaying) player.Play();
+
+                templayer = default;
+            }
         }
 
         public async Task PlayTheTrack(int i)
         {
-            if (i < 1 || i >= tracceTesto.Count)
-                return;
+            if (i < 0 || i >= tracceTesto.Count) return;
+
+            if (LastTrack != i) secondi = 0; //TODO: Potrebbe essere il fix
 
             LastTrack = i;
 
@@ -90,7 +108,7 @@ namespace GraficaCurone.Manager
             if (player != null && player.IsPlaying) player.Dispose();
 
             player = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(tracceAudio[i]));
-            if (player == null) { return; }
+            if (player == null) return;
             player.Seek(secondi);
             player.Play();
         }
@@ -100,11 +118,8 @@ namespace GraficaCurone.Manager
             if (player == null || player == default)
                 return;
 
-            if (!player.IsPlaying)
-                player.Play();
-
-            else
-                player.Pause();
+            if (!player.IsPlaying) player.Play();
+            else player.Pause();
         }
 
         public void StartAccelerometer()

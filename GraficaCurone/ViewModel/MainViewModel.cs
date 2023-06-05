@@ -114,11 +114,10 @@ namespace GraficaCurone.ViewModel
                 return;
             }
             
-            if (trackManager.player != null && trackManager.player.IsPlaying)
+            if (trackManager.player != null)
             {
                 await trackManager.LoadTracksAsync();
-                trackManager.secondi = trackManager.player.CurrentPosition;
-                await trackManager.PlayTheTrack(trackManager.LastTrack);
+                //await trackManager.PlayTheTrack(trackManager.LastTrack);
             }
         }
 
@@ -151,10 +150,11 @@ namespace GraficaCurone.ViewModel
             MapVisible = true;
             CompassVisible= false;
             CameraVisible= false;
-            await cameraView.StopCameraAsync();
 
             CurrentPage = null;
             CurrentPage = MapPage.Content;
+
+            await cameraView.StopCameraAsync();
         }
         #endregion
 
@@ -214,7 +214,11 @@ namespace GraficaCurone.ViewModel
             if (args == null) { }
             MainThread.BeginInvokeOnMainThread(async() =>
             {
-                await trackManager.PlayTheTrack(int.Parse(args.Result[0].Text) - 1);
+                int result;
+                bool check = int.TryParse((args.Result[0].Text), out result);
+                if (!check) return;
+
+                await trackManager.PlayTheTrack(result-1);
                 await ShowMap();
                 await cameraView.StopCameraAsync();
             });
