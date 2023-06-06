@@ -65,7 +65,10 @@
                                         <DataTrigger TargetType="Button" Binding="{Binding MapVisible}" Value="True">
                                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightPressedButton}, Dark={StaticResource DarkPressedButton}}" />
                                         </DataTrigger>
-                                        <DataTrigger TargetType="Button" Binding="{Binding MapVisible}" Value="False">
+                                        <DataTrigger TargetType="Button" Binding="{Binding CompassVisible}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding CameraVisible}" Value="True">
                                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}" />
                                         </DataTrigger>
                                     </Button.Triggers>
@@ -81,10 +84,13 @@
                                     Command="{Binding SwitchPageCommand}"
                                     CommandParameter="showcompass">
                                     <Button.Triggers>
-                                            <DataTrigger TargetType="Button" Binding="{Binding CompassVisible}" Value="True">
+                                        <DataTrigger TargetType="Button" Binding="{Binding CompassVisible}" Value="True">
                                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightPressedButton}, Dark={StaticResource DarkPressedButton}}" />
                                         </DataTrigger>
-                                            <DataTrigger TargetType="Button" Binding="{Binding CompassVisible}" Value="False">
+                                        <DataTrigger TargetType="Button" Binding="{Binding MapVisible}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding CameraVisible}" Value="True">
                                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}" />
                                         </DataTrigger>
                                     </Button.Triggers>
@@ -102,7 +108,10 @@
                                         <DataTrigger TargetType="Button" Binding="{Binding CameraVisible}" Value="True">
                                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightPressedButton}, Dark={StaticResource DarkPressedButton}}" />
                                         </DataTrigger>
-                                        <DataTrigger TargetType="Button" Binding="{Binding CameraVisible}" Value="False">
+                                        <DataTrigger TargetType="Button" Binding="{Binding MapVisible}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding CompassVisible}" Value="True">
                                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}" />
                                         </DataTrigger>
                                     </Button.Triggers>

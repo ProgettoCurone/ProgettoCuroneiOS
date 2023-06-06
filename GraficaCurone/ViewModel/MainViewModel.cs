@@ -24,14 +24,64 @@ namespace GraficaCurone.ViewModel
     public partial class MainViewModel : ObservableObject
     {
         #region Variabili_Parte_Grafica
-        [ObservableProperty]
-        private bool selected;
-        [ObservableProperty]
+        [ObservableProperty]private bool selected;
+
         private bool mapVisible;
-        [ObservableProperty]
+        public bool MapVisible
+        {
+            get => mapVisible;
+
+            set {
+                mapVisible = value;
+
+                if (value)
+                {
+                    CompassVisible = false;
+                    CameraVisible = false;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
         private bool compassVisible;
-        [ObservableProperty]
+        public bool CompassVisible
+        {
+            get => compassVisible;
+
+            set
+            {
+                compassVisible = value;
+
+                if (value)
+                {
+                    MapVisible = false;
+                    CameraVisible = false;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
         private bool cameraVisible;
+        public bool CameraVisible
+        {
+            get => cameraVisible;
+
+            set
+            {
+                cameraVisible = value;
+
+                if (value)
+                {
+                    MapVisible = false;
+                    CompassVisible = false;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
         [ObservableProperty]
         private double rotation;
         [ObservableProperty]
@@ -125,6 +175,8 @@ namespace GraficaCurone.ViewModel
         [RelayCommand]
         public async Task SwitchPage(string pageType)
         {
+            if (isBusy) return;
+            isBusy = true;
             //utilizziamo una scringa come valore di riferimento in MVVM, ogni volta che un bottone verrà premuto, chiamerà il seguente metodo 
             //utilizzando come stringa "pageType", e il metodo non farà altro di verificare quale delle pagine è stata chiamata. 
             switch (pageType)
@@ -138,21 +190,20 @@ namespace GraficaCurone.ViewModel
                     break;
 
                 case "showcamera":
-                    await ShowCamera();
+                    ShowCamera();
                     break;
             }
+            isBusy = false;
         }
         #endregion
 
         #region Mappa
         public async Task ShowMap()
         {
-            MapVisible = true;
-            CompassVisible= false;
-            CameraVisible= false;
-
             CurrentPage = null;
             CurrentPage = MapPage.Content;
+
+            MapVisible = true;
 
             await cameraView.StopCameraAsync();
         }
@@ -161,9 +212,6 @@ namespace GraficaCurone.ViewModel
         #region Bussola
         public async Task ShowCompass()
         {
-            MapVisible = false;
-            CompassVisible = true;
-            CameraVisible = false;
             //Fai direttamente un metodo switch page che stoppa la camera metti la current a null ecc
             await cameraView.StopCameraAsync();
             if (Compass.Default.IsSupported)
@@ -177,6 +225,8 @@ namespace GraficaCurone.ViewModel
                 CurrentPage = null;
                 CurrentPage = CompassPage.Content;
             }
+
+            CompassVisible = true;
         }
         private void Compass_ReadingChanged(object sender, CompassChangedEventArgs e)
         {
@@ -187,18 +237,16 @@ namespace GraficaCurone.ViewModel
 
         #region Camera
 
-        public async Task ShowCamera()
+        public void ShowCamera()
         {
-            MapVisible = false;
-            CompassVisible = false;
-            CameraVisible = true;
-
             CurrentPage = null;
             CurrentPage = QrCodePage.Content;
-            await CameraLoadAsync();
+            CameraLoadAsync();
+
+            CameraVisible = true;
         }
 
-        public async Task CameraLoadAsync()
+        public void CameraLoadAsync()
         {
             if (cameraView.Camera == null && cameraView.Cameras.Count > 0)
                 cameraView.Camera = cameraView.Cameras.First();
@@ -209,7 +257,7 @@ namespace GraficaCurone.ViewModel
                 await cameraView.StartCameraAsync();
             });
         }
-        public async Task BarCodeResultAsync(BarcodeEventArgs args)
+        public void BarCodeResultAsync(BarcodeEventArgs args)
         {
             if (args == null) { }
             MainThread.BeginInvokeOnMainThread(async() =>
@@ -285,28 +333,41 @@ namespace GraficaCurone.ViewModel
         }
 
         private int clickVar;
+        private bool nfcBusy = false;
         private Timer timer;
 
         [RelayCommand]
         private async void TapGesture()
         {
-            if (timer == null)
+            try
             {
-                timer = new Timer(_ =>
+                if (nfcBusy) return;
+
+                if (timer == null)
                 {
+                    timer = new Timer(_ =>
+                    {
+                        clickVar = 0;
+                        timer = null;
+                    }, null, TimeSpan.FromSeconds(2), Timeout.InfiniteTimeSpan);
+                }
+
+                clickVar++;
+                Debug.Print(clickVar.ToString());
+
+                if (clickVar >= 3)
+                {
+                    nfcBusy = true;
+
+                    await NFCManager.BeginListening();
                     clickVar = 0;
                     timer = null;
-                }, null, TimeSpan.FromSeconds(2), Timeout.InfiniteTimeSpan);
-            }
 
-            clickVar++;
-            Debug.Print(clickVar.ToString());
-               
-            if (clickVar >= 3)
+                    nfcBusy = false;
+                }
+            } catch(Exception ex)
             {
-                await NFCManager.BeginListening();
-                clickVar = 0;
-                timer = null;
+                await App.Current.MainPage.DisplayAlert("Ciao", ex.Message, "OK");
             }
         }
     }

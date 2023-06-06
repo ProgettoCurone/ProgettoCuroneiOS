@@ -20,13 +20,13 @@ public partial class QrCodePage : ContentPage
     //    await viewModel.CameraLoadAsync();
     //}
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
-        if (viewModel.CameraVisible) await viewModel.CameraLoadAsync();
+        if (viewModel.CameraVisible) viewModel.CameraLoadAsync();
     }
 
-    private async void BarcodeDetected(object sender, BarcodeEventArgs args)
+    private void BarcodeDetected(object sender, BarcodeEventArgs args)
     {
-        await viewModel.BarCodeResultAsync(args);
+        viewModel.BarCodeResultAsync(args);
     }
 }

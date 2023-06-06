@@ -17,16 +17,6 @@ public partial class MainView : Shell
         BindingContext = mainViewModel;
 	}
 
-    public async void CameraLoaded(object sender, EventArgs e)
-    {
-        await mainViewModel.CameraLoadAsync();
-    }
-
-    private async void BarcodeDetected(object sender, Camera.MAUI.ZXingHelper.BarcodeEventArgs args)
-    {
-        await mainViewModel.BarCodeResultAsync(args);
-    }
-
     protected override async void OnAppearing()
     {
         await mainViewModel.Init();
@@ -36,8 +26,8 @@ public partial class MainView : Shell
         //mainViewModel.IosNfcManager.StartListening();
     }
 
-    private async void OnAppearing(object sender, EventArgs e)
+    private void OnAppearing(object sender, EventArgs e)
     {
-        if (mainViewModel != null && mainViewModel.CameraVisible) await mainViewModel.ShowCamera();
+        if (mainViewModel != null && mainViewModel.CameraVisible) mainViewModel.ShowCamera();
     }
 }

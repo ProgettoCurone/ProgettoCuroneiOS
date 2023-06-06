@@ -1,7 +1,7 @@
 ﻿using Camera.MAUI;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-
+using Syncfusion.Maui.Core.Hosting;
 
 namespace GraficaCurone;
 
@@ -14,6 +14,7 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
             .UseMauiCameraView()
+            .ConfigureSyncfusionCore()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
