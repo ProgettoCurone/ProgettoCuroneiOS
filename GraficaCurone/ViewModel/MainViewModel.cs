@@ -339,35 +339,29 @@ namespace GraficaCurone.ViewModel
         [RelayCommand]
         private async void TapGesture()
         {
-            try
+            if (nfcBusy) return;
+
+            if (timer == null)
             {
-                if (nfcBusy) return;
-
-                if (timer == null)
+                timer = new Timer(_ =>
                 {
-                    timer = new Timer(_ =>
-                    {
-                        clickVar = 0;
-                        timer = null;
-                    }, null, TimeSpan.FromSeconds(2), Timeout.InfiniteTimeSpan);
-                }
-
-                clickVar++;
-                Debug.Print(clickVar.ToString());
-
-                if (clickVar >= 3)
-                {
-                    nfcBusy = true;
-
-                    await NFCManager.BeginListening();
                     clickVar = 0;
                     timer = null;
+                }, null, TimeSpan.FromSeconds(2), Timeout.InfiniteTimeSpan);
+            }
 
-                    nfcBusy = false;
-                }
-            } catch(Exception ex)
+            clickVar++;
+            Debug.Print(clickVar.ToString());
+               
+            if (clickVar >= 3)
             {
-                await App.Current.MainPage.DisplayAlert("Ciao", ex.Message, "OK");
+                nfcBusy = true;
+
+                await NFCManager.BeginListening();
+                clickVar = 0;
+                timer = null;
+
+                nfcBusy = false;
             }
         }
     }

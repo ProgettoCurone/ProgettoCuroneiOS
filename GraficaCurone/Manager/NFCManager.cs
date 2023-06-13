@@ -63,7 +63,7 @@ public partial class NFCManager : ObservableObject
     #endregion
 
     #region showAlert
-    Task ShowAlert(string message, string title = null) => App.Current.MainPage.DisplayAlert(string.IsNullOrWhiteSpace(title) ? "TITOLO" : title, message, "OK");
+    Task ShowAlert(string message, string title = null) => MainThread.InvokeOnMainThreadAsync(async () => await App.Current.MainPage.DisplayAlert(string.IsNullOrWhiteSpace(title) ? "TITOLO" : title, message, "OK"));
     #endregion
 
     #region NFC
@@ -197,7 +197,7 @@ public partial class NFCManager : ObservableObject
                 if (!isFirstActive) return;
                 isFirstActive = false;
 
-                await ShowAlert("Partito");
+                //await ShowAlert("Partito");
 
                 if (DeviceInfo.Platform == DevicePlatform.iOS) _isDeviceiOS = true;
                 await AutoStartAsync().ConfigureAwait(false);

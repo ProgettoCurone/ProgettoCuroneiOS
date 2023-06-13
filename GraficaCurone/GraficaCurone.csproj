@@ -15,7 +15,7 @@
 		<ApplicationTitle>CuroneSteps</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.graficacurone</ApplicationId>
+		<ApplicationId>iss.greppi.curone_steps</ApplicationId>
 		<ApplicationIdGuid>8c58504e-0efb-4ae5-8feb-7fb65884c761</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -28,6 +28,9 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+
+		<MauiVersion>7.0.52</MauiVersion>
+
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
@@ -37,6 +40,9 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
+	  <CodesignProvision>TestCuroneWithNFC</CodesignProvision>
+	  <CodesignKey>Apple Distribution: Pietro Petracca (93TPXWGA29)</CodesignKey>
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- App Icon -->
@@ -69,6 +75,9 @@
 	  <None Remove="Resources\Images\iconsinterrogativo.png" />
 	  <None Remove="Resources\Images\menu.png" />
 	  <None Remove="Resources\Images\menugif.gif" />
+	  <None Remove="Model\" />
+	  <None Remove="Resources\Images\forest_image.png" />
+	  <None Remove="Resources\Images\nfc_illustration.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -76,7 +85,6 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="5.1.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="PdfiumViewer" Version="2.13.0" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
 		<PackageReference Include="Plugin.NFC" Version="0.1.26" />
 		<PackageReference Include="Syncfusion.Maui.PdfViewer" Version="21.2.8" />
@@ -112,4 +120,13 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Model\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Resources\Images\forest_image.png" />
+	  <BundleResource Include="Resources\Images\forest_image.png" />
+	  <BundleResource Include="Resources\Images\nfc_illustration.png" />
+	  <BundleResource Include="Resources\Images\nfc_illustration.png" />
+	</ItemGroup>
 </Project>

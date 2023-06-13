@@ -10,6 +10,7 @@
         FlyoutBehavior="Flyout"
         FlyoutHeaderBehavior="Fixed"
         FlyoutVerticalScrollMode="Auto"
+        NavigationPage.HasNavigationBar="False"
         BackgroundColor="{AppThemeBinding Light={StaticResource LightFlyout}, Dark={StaticResource DarkFlyout}}"
         x:DataType="vm:MainViewModel">
 

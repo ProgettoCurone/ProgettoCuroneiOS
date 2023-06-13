@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Camera.MAUI;
 using GraficaCurone.ViewModel;
 
@@ -12,22 +13,41 @@ public partial class MainView : Shell
 
     public MainView()
 	{
-		InitializeComponent();
-        mainViewModel = new MainViewModel(this);
-        BindingContext = mainViewModel;
-	}
+        try
+        {
+            mainViewModel = new MainViewModel(this);
+            InitializeComponent();
+            BindingContext = mainViewModel;
+
+        } catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 
     protected override async void OnAppearing()
     {
-        await mainViewModel.Init();
-        await mainViewModel.trackManager.Init();
-        await mainViewModel.NFCManager.Init();
+        try
+        {
+            await mainViewModel.Init();
+            await mainViewModel.trackManager.Init();
+            await mainViewModel.NFCManager.Init();
+        } catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
 
         //mainViewModel.IosNfcManager.StartListening();
     }
 
     private void OnAppearing(object sender, EventArgs e)
     {
-        if (mainViewModel != null && mainViewModel.CameraVisible) mainViewModel.ShowCamera();
+        try
+        {
+            if (mainViewModel != null && mainViewModel.CameraVisible) mainViewModel.ShowCamera();
+        } catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }

@@ -34,20 +34,6 @@
 	<string>11.0</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera Usage</string>
-	
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
 	<key>NFCReaderUsageDescription</key>
 	<string>NFC tag to read NDEF messages into the application</string>
 	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
@@ -55,5 +41,9 @@
 		<string>com.apple.developer.nfc.readersession.iso7816.select-identifiers</string>
 		<string>D2760000850100</string>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>3</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
 </dict>
 </plist>

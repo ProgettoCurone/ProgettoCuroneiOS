@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GraficaCurone.ViewModel"
+             xmlns:model="clr-namespace:GraficaCurone.Model"
+             xmlns:view="clr-namespace:GraficaCurone.View"
+             x:Class="GraficaCurone.View.IntroScreenView"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="False"
+             NavigationPage.HasNavigationBar = "False"
+             Title="IntroScreenView"
+             
+             Background="{AppThemeBinding Light={StaticResource LightFlyout}, Dark={StaticResource DarkFlyout}}">
+    <ContentPage.BindingContext>
+        <vm:IntroScreenViewModel />
+    </ContentPage.BindingContext>
+    
+    <Grid RowDefinitions="90*, 10*">
+        <CarouselView IndicatorView="indicatorView"
+                      Grid.Row="0"
+                      Loop="False"
+                      HorizontalScrollBarVisibility="Never"
+                      Position="{Binding Position}"
+                      HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+            ItemsSource="{Binding IntroScreens}">
+            <CarouselView.ItemTemplate>
+                <DataTemplate x:DataType="model:IntroScreenModel">
+                    <Grid RowDefinitions="60*, 40*">
+                        <Image Source="{Binding IntroIcon}" Aspect="AspectFit" Grid.Row="0"/>
+                        <VerticalStackLayout Grid.Row="1">
+                            <Label Text="{Binding IntroTitle}" FontSize="28" FontAttributes="Bold"/>
+                            <Label Text="{Binding IntroDescription}" FontSize="20"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+        <StackLayout Grid.Row="1">
+            <IndicatorView
+                x:Name="indicatorView"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                IndicatorSize="15"
+                IndicatorColor="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}"
+                SelectedIndicatorColor="{AppThemeBinding Light={StaticResource LightPressedButton}, Dark={StaticResource DarkPressedButton}}"/>
+            
+            <Frame
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                Padding="0"
+                CornerRadius="30"
+                HeightRequest="60" WidthRequest="60" BackgroundColor="{AppThemeBinding Light={StaticResource LightFrame}, Dark={StaticResource DarkFrame}}">
+                <Label Text="{Binding ButtonText}" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NextCommand}"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+        </StackLayout>
+    </Grid>
+</ContentPage>
